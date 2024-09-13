@@ -1,0 +1,13 @@
+---
+title: "Practica 1"
+format: html
+editor: visual
+---
+
+## Practica 1
+
+```{r}
+library(readr)
+data<-read_csv()
+```
+
