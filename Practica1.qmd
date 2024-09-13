@@ -7,7 +7,42 @@ editor: visual
 ## Practica 1
 
 ```{r}
+library(ggplot2)
 library(readr)
-data<-read_csv()
+library(readxl)
+data<-read_xlsx("estudioSatisfaccion2023.xlsx")
+
 ```
 
+Antes d'aixo hauriem de posar cara variable en la forma que toca com character o numeric Eliminam identificacion i dates i a mes el survey_id es igual a tot
+
+```{r,include=FALSE}
+data.v1<-data[,-1:-4]
+
+```
+
+Tractament plantilla per dades de caracter com el nom del museu
+
+```{r}
+hola<-table(data.v1$`1_¿Qué museo acabas de visitar?`)
+holis<-prop.table(hola)
+holis
+barplot(holis)
+```
+
+Tractament per dades ordinals com les valoracions amb un histograma
+
+```{r}
+prova<-table(data.v1$`2_La recepción y atención al público`)
+prova
+taula<-prop.table(prova)
+taula
+patata=as.numeric(data.v1$`2_La recepción y atención al público`)
+hist(x=patata,ylim = c(0,1500))
+```
+
+```{r}
+valoracion_recepcio<-as.numeric(na.omit(data.v1$`2_La recepción y atención al público`))
+mean(valoracion_recepcio)
+median(valoracion_recepcio)
+```
