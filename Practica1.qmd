@@ -5,7 +5,10 @@ editor: visual
 ---
 
 ## Practica 1
+
 Primer especificam totes les llibreries necessàries pel futur, llegim el data frame en format xlsx a vegades de csv, ja que el format d'aquest últim té molts errors de format.
+
+
 ```{r}
 library(ggplot2)
 library(readr)
@@ -13,34 +16,65 @@ library(readxl)
 data<-read_xlsx("estudioSatisfaccion2023.xlsx")
 
 ```
+A més aquí definirem algunes funcions que usarem posteriorment.
+```{r}
+valors_na<-function(variable){
+  return (sum(is.na(variable)))
+  
+}
+```
+
+
+
 (Antes d'aixo hauriem de posar cara variable en la forma que toca com character o numeric Eliminam identificacion i dates i a mes el survey_id es igual a tot)
 
 Eliminarem la identificació de cada enquestat per mantenir l'anonimat i les dues variables posteriors, ja que no aporten informació. La variable "Survey_Id" la podem eliminar, ja que només existeix un valor.
+
 ```{r,include=FALSE}
 data.v1<-data[,-1:-4]
 ```
 
 Ara a l'haver eliminat dades innecessàries podem veure com totes les variables estan definides com a caràcter, algunes hauran de ser del tipus "numeric" per tal de poder fer càlculs amb els valors.
+
+La informació més important del data frame és la distribució de participants a través dels museus, veurem quin dels museus és el més frecuent i quin el que menys.
+
 (Tractament plantilla per dades de caracter com el nom del museu, podem canviar el tipus de presentacio com un violi)
 
 ```{r}
-hola<-table(data.v1$`1_¿Qué museo acabas de visitar?`)
-holis<-prop.table(hola)
-holis
-barplot(holis)
+taula_frec_museus<-table(data.v1$`1_¿Qué museo acabas de visitar?`)
+taula_frec_museus
+prop_taula_frec_museus<-prop.table(taula_frec_museus)
+prop_taula_frec_museus
 ```
 
-Tractament per dades ordinals com les valoracions amb un histograma
+A través d'aquesta taula podem apreciar que un 95% dels visitants provenen del museu "Història de Madrid" o "San Antonio de la Florida" amb 1178 i 467 enquestats respectivament. Amb aquesta total dominació, els grafs perden tot el valor representatiu, podem notar que qui té menys enquestats es " Castillo de Alameda" amb un 0.1% amb 2 enquestats. 
+
+(Tractament per dades ordinals com les valoracions amb un histograma)
+De les variables numèriques com valoracions, es a dir, de la pregunta 2 fins la 6 ens centrarem en l'estudi de la última, ja que totes les anteriors tenen resultats similars. 
+
+Antes de l'estudi exploratori de la pregunta 6 es interesant notar com en la pregunta 5, que tracta l'adaptació a la discapacitat, molts més enquestats han decidit no contestar-la amb un total de 332, on per exemple la pregunta 2 te només uns 59.
+```{r}
+variable_2<-data.v1$`2_La recepción y atención al público`
+variable_5<-data.v1$`5_La adaptación a visitantes con discapacidad`
+valors_na(variable_2)
+valors_na(variable_5)
+```
 
 ```{r}
-prova<-table(data.v1$`2_La recepción y atención al público`)
+prova<-table(variable_5)
 prova
 taula<-prop.table(prova)
 taula
-patata=as.numeric(data.v1$`2_La recepción y atención al público`)
+patata=as.numeric(variable_5)
 hist(x=patata,ylim = c(0,1500))
 ```
-Aqui un codi rapid per trobar mitjana o media, depenent del que volguem
+Podem notar que la moda seria donar un 10 a la pregunta, al tenir un 62% de probabilitat també serà la media, a més podem calcular facilment la mitjana la qual dona un valor de 9.175
+```{r}
+mean(as.numeric(na.omit(variable_5)))
+```
+
+(Aqui un codi rapid per trobar mitjana o media, depenent del que volguem)
+
 ```{r}
 valoracion_recepcio<-as.numeric(na.omit(data.v1$`2_La recepción y atención al público`))
 mean(valoracion_recepcio)
