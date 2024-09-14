@@ -5,7 +5,7 @@ editor: visual
 ---
 
 ## Practica 1
-
+Primer especificam totes les llibreries necessàries pel futur, llegim el data frame en format xlsx a vegades de csv, ja que el format d'aquest últim té molts errors de format.
 ```{r}
 library(ggplot2)
 library(readr)
@@ -13,15 +13,15 @@ library(readxl)
 data<-read_xlsx("estudioSatisfaccion2023.xlsx")
 
 ```
+(Antes d'aixo hauriem de posar cara variable en la forma que toca com character o numeric Eliminam identificacion i dates i a mes el survey_id es igual a tot)
 
-Antes d'aixo hauriem de posar cara variable en la forma que toca com character o numeric Eliminam identificacion i dates i a mes el survey_id es igual a tot
-
+Eliminarem la identificació de cada enquestat per mantenir l'anonimat i les dues variables posteriors, ja que no aporten informació. La variable "Survey_Id" la podem eliminar, ja que només existeix un valor.
 ```{r,include=FALSE}
 data.v1<-data[,-1:-4]
-
 ```
 
-Tractament plantilla per dades de caracter com el nom del museu
+Ara a l'haver eliminat dades innecessàries podem veure com totes les variables estan definides com a caràcter, algunes hauran de ser del tipus "numeric" per tal de poder fer càlculs amb els valors.
+(Tractament plantilla per dades de caracter com el nom del museu, podem canviar el tipus de presentacio com un violi)
 
 ```{r}
 hola<-table(data.v1$`1_¿Qué museo acabas de visitar?`)
@@ -40,7 +40,7 @@ taula
 patata=as.numeric(data.v1$`2_La recepción y atención al público`)
 hist(x=patata,ylim = c(0,1500))
 ```
-
+Aqui un codi rapid per trobar mitjana o media, depenent del que volguem
 ```{r}
 valoracion_recepcio<-as.numeric(na.omit(data.v1$`2_La recepción y atención al público`))
 mean(valoracion_recepcio)
