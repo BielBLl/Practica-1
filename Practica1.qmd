@@ -13,6 +13,7 @@ library(ggplot2)
 library(readr)
 library(readxl)
 data<-read_xlsx("estudioSatisfaccion2023.xlsx")
+head(data)
 
 ```
 
@@ -93,4 +94,16 @@ taula_v_9
 prop.table(taula_v_9)
 ```
 
-Prova de que s'ha actualitzat. hola
+Vegem ara quina es la proporcio d'edat dels visitants del museu.
+
+```         
+```
+
+```{r}
+
+variable_8<-data.v1$`8_¿Cuál es su grupo de edad?`
+taula_v_8<-table(variable_8)
+pie(taula_v_8,main = "Distribució Edats")
+
+
+```
