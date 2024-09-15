@@ -1,10 +1,10 @@
 ---
-title: "Practica 1"
+title: "Pràctica 1"
 format: html
 editor: visual
 ---
 
-## Practica 1
+## Pràctica 1
 
 Primer especificam totes les llibreries necessàries pel futur, llegim el data frame en format xlsx a vegades de csv, ja que el format d'aquest últim té molts errors de format.
 
@@ -25,7 +25,7 @@ valors_na<-function(variable){
 }
 ```
 
-(Antes d'aixo hauriem de posar cada variable en la forma que toca com character o numeric Eliminam identificacion i dates i a mes el survey_id es igual a tot)
+(Abans d'això hauriem de posar cada variable en la forma que toca com 'character' o 'numeric'. Eliminam identificació i dates i a més el survey_id és igual a tot.)
 
 Eliminarem la identificació de cada enquestat per mantenir l'anonimat i les dues variables posteriors, ja que no aporten informació. La variable "Survey_Id" la podem eliminar també, ja que només existeix un valor.
 
@@ -39,7 +39,7 @@ Ara a l'haver eliminat dades innecessàries podem veure com totes les variables 
 dimensions_data<-dim(data.v1)
 ```
 
-La informació més important del data frame és la distribució de participants a través dels museus, veurem quin dels museus és el més frecuent i quin el que menys.En l'enquesta que esteim estodiant existeixen 1728 enquestats i 11 variables en total.
+La informació més important del data frame és la distribució de participants a través dels museus, veurem quin dels museus és el més frecuent i quin el que menys.En l'enquesta que esteim estudiant existeixen 1728 enquestats i 11 variables en total.
 
 (Tractament plantilla per dades de caracter com el nom del museu, podem canviar el tipus de presentacio com un violi)
 
@@ -50,13 +50,13 @@ prop_taula_frec_museus<-prop.table(taula_frec_museus)
 prop_taula_frec_museus
 ```
 
-A través d'aquesta taula podem apreciar que un 95% dels visitants provenen del museu "Història de Madrid" o "San Antonio de la Florida" amb 1178 i 467 enquestats respectivament. Amb aquesta total dominació, els grafs perden tot el valor representatiu, podem notar que qui té menys enquestats es " Castillo de Alameda" amb un 0.1% amb 2 enquestats.
+A través d'aquesta taula podem apreciar que un 95% dels visitants provenen del museu "Història de Madrid" o "San Antonio de la Florida" amb 1178 i 467 enquestats respectivament. Amb aquesta total dominació, els grafs perden tot el valor representatiu, podem notar que qui té menys enquestats és " Castillo de Alameda" amb un 0.1% amb 2 enquestats.
 
 (Tractament per dades ordinals com les valoracions amb un histograma)
 
 De les variables numèriques com valoracions, es a dir, de la pregunta 2 fins la 6 ens centrarem en l'estudi de la última, ja que totes les anteriors tenen resultats similars.
 
-Antes de l'estudi exploratori de la pregunta 6 és interesant notar com la pregunta 5, que tracta l'adaptació a la discapacitat,te molts més enquestats que han decidit no contestar-la amb un total de 332, on per exemple la pregunta 2 te només uns 59.
+Abans de l'estudi exploratori de la pregunta 6 és interesant notar com la pregunta 5, que tracta l'adaptació a la discapacitat, té molts més enquestats que han decidit no contestar-la amb un total de 332, on per exemple la pregunta 2 te només uns 59.
 
 ```{r}
 variable_2<-data.v1$`2_La recepción y atención al público`
@@ -80,7 +80,7 @@ Podem notar que la moda seria donar un 10 a la pregunta, al tenir un 62% de prob
 mean(as.numeric(na.omit(variable_5)))
 ```
 
-Una dada típica d'enquestes seria el sexe de l'enquestat, amb un estudi superficial podem facilment veure que el genere femení manté la dominancia amb un 57.3% de pressència, el sexe masculi amb un 39.4% en segón lloc i finalment "Otro" amb un 3.2%.
+Una dada típica d'enquestes seria el sexe de l'enquestat, amb un estudi superficial podem fácilment veure que el gènere femení manté la dominancia amb un 57.3% de pressència, el sexe masculí amb un 39.4% en segon lloc i finalment "Otro" amb un 3.2%.
 
 ```{r}
 variable_9<-data.v1$`9_¿Cuál es su sexo?`
@@ -92,3 +92,5 @@ pie(taula_v_9,main = "Distribució Sexes")
 taula_v_9
 prop.table(taula_v_9)
 ```
+
+Prova de que s'ha actualitzat.
