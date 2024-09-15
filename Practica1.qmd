@@ -12,6 +12,7 @@ Primer especificam totes les llibreries necessàries pel futur, llegim el data f
 library(ggplot2)
 library(readr)
 library(readxl)
+library(dplyr)
 data<-read_xlsx("estudioSatisfaccion2023.xlsx")
 head(data)
 
@@ -40,9 +41,15 @@ Ara a l'haver eliminat dades innecessàries podem veure com totes les variables 
 dimensions_data<-dim(data.v1)
 ```
 
-La informació més important del data frame és la distribució de participants a través dels museus, veurem quin dels museus és el més frecuent i quin el que menys.En l'enquesta que esteim estudiant existeixen 1728 enquestats i 11 variables en total.
+Abans de començar a tractar la informació del data frame, primer mirem quins elements es tenen en compte en aquest estudi.
 
-(Tractament plantilla per dades de caracter com el nom del museu, podem canviar el tipus de presentacio com un violi)
+```{r}
+colnames(data.v1)
+```
+
+La informació més important del data frame és la distribució de participants a través dels museus, veurem quin dels museus és el més frecuent i quin el que menys. En l'enquesta que esteim estudiant existeixen 1728 enquestats i 11 variables en total.
+
+(Tractament plantilla per dades de caracter com el nom del museu, podem canviar el tipus de presentació com un violi)
 
 ```{r}
 taula_frec_museus<-table(data.v1$`1_¿Qué museo acabas de visitar?`)
@@ -52,6 +59,28 @@ prop_taula_frec_museus
 ```
 
 A través d'aquesta taula podem apreciar que un 95% dels visitants provenen del museu "Història de Madrid" o "San Antonio de la Florida" amb 1178 i 467 enquestats respectivament. Amb aquesta total dominació, els grafs perden tot el valor representatiu, podem notar que qui té menys enquestats és " Castillo de Alameda" amb un 0.1% amb 2 enquestats.
+
+(Tractament per dades ordinals com les valoracions amb un histograma)
+
+De les variables numèriques com valoracions, es a dir, de la pregunta 2 fins la 6 ens centrarem en l'estudi de la última, ja que totes les anteriors tenen resultats similars.
+
+Abans de l'estudi exploratori de la pregunta 6 és interesant notar com la pregunta 5, que tracta l'adaptació a 
+Mitjançant aquesta taula podem apreciar que un 95% dels visitants provenen del museu "Història de Madrid" o "San Antonio de la Florida" amb 1178 i 467 enquestats respectivament. Amb aquesta total dominació, els grafs perden tot el valor representatiu, podem notar que qui té menys enquestats és " Castillo de Alameda" amb un 0.1% amb 2 enquestats.
+
+Per ilustrar millor aquesta informació introduïrem un gràfic amb els museus i la quantitat de gent que ha anat a visitar cada un.
+
+```{r}
+barplot(taula_frec_museus,
+        main = "Nombre de visitants per museu",
+        beside = TRUE,
+        legend.text = TRUE,
+        col = palette("Pastel 2"),
+        las = 2,          # Rotar etiquetes de l'eix X
+        cex.names = 0.6,  # Reuïm escala de les etiquetes
+        cex.main = 1.4)   # Ajuestem tamany del títol
+```
+
+D'aquesta manera, només fent un ràpid colp d'ull al gràfic ja podem intuïr els resultats numèrics que hem obtingut abans.
 
 (Tractament per dades ordinals com les valoracions amb un histograma)
 
@@ -96,14 +125,80 @@ prop.table(taula_v_9)
 
 Vegem ara quina es la proporcio d'edat dels visitants del museu.
 
-```         
-```
-
 ```{r}
-
 variable_8<-data.v1$`8_¿Cuál es su grupo de edad?`
 taula_v_8<-table(variable_8)
 pie(taula_v_8,main = "Distribució Edats")
+```
+
+A continuació, una pregunta que es podem demanar és si existeix alguna relació entre el grup d'edat al que hi pertanyen els visitants i els museus que visiten aquests grups.
+
+```{r}
+# Ens assegurem que les variables siguen factors.
+data.v1$`8_¿Cuál es su grupo de edad?` <- as.factor(data.v1$`8_¿Cuál es su grupo de edad?`)
+data.v1$`1_¿Qué museo acabas de visitar?` <- as.factor(data.v1$`1_¿Qué museo acabas de visitar?`)
+
+# Creem la taula que ens interessa.
+taula_museus_edat <- table(data.v1$`8_¿Cuál es su grupo de edad?`, data.v1$`1_¿Qué museo acabas de visitar?`)
+
+# realitzem la prova de independència amb el mètode de Fisher ja que la taula té prous valors propers o igual a 0, però per ser una taula tant gran hem de fer-ho mitjançant la simulacions de p-valors perquè puga funcionar.
+test_result <- fisher.test(taula_museus_edat, simulate.p.value = TRUE)
+test_result
+```
+
+Com hem obtingut un p-valor molt petit (0.0005) haurem de rebutjar la hipòtesi de què les variables són independents, llavors les edats i els museus poden guardar algun tipus de ralció. Ara bé, aquestes dades estan subjectes a què la frqüència de visita als museus difereix molt d'uns a altres, llavors pot influenciar prou en aquest estudi.
+
+Un altre dupte que ens pot sortir al tractar amb un servei, en aquest cas el que oferixen els museus, és la valoració mitjana de cada un d'ells, per així tenir en compte aquesta informació per triar quin museu visitar. Aleshores, calcularem la puntuació mitjana de cada un.
+
+```{r}
+# Creem la taula amb els museus i les seues puntuacions.
+taula_museus_puntuacio <- table(data.v1$`1_¿Qué museo acabas de visitar?`, data.v1$`6_Teniendo en cuenta toda su experiencia, ¿cuál es su valoración global con la visita  en una escala de 0 a 10, siendo “0”, totalmente insatisfactoria y “10”, totalmente satisfactoria`)
+
+# Reordenem els nombres perquè siguen ascendents.
+taula_museus_puntuacio <- taula_museus_puntuacio[, c(1,2, 4:ncol(taula_museus_puntuacio), 3)]
+taula_museus_puntuacio
+
+# Definim una funció on donat un vector ens retorne la seua mitjana ponderada.
+media_ponderada <- function(vector){
+  ponderacions = c(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+  vector_ponderat = vector * ponderacions
+  return (sum(vector_ponderat) / sum(vector))
+  
+}
 
 
+# A continuació calcularem la mitjana de cada museu i les guardarem en un vector.
+mitjanes = c()
+
+for (i in 1:nrow(taula_museus_puntuacio)) {
+  vector = as.numeric(unlist(taula_museus_puntuacio[i, ]))
+  mitjanes <- c(mitjanes, media_ponderada(vector))
+}
+
+mitjanes
+museus = c(rownames(taula_museus_puntuacio))
+
+# Creem una taula amb la puntuació mitjana de cada museu.
+taula_mitjana <- data.frame(
+  Museu = museus,
+  Mitjana = mitjanes
+)
+
+taula_mitjana
+
+```
+
+Per fer aquesta informació més visual farem un gràfic amb les puntiacions mitjanes que ha obtingut cada museu.
+
+```{r}
+# Crear el barplot
+barplot(
+  taula_mitjana$Mitjana, 
+  names.arg = taula_mitjana$Museu, 
+  las = 2, 
+  col = palette("Pastel 2"), 
+  main = "Valoració dels museus", 
+  ylab = "Valoració",
+  cex.names = 0.7
+)
 ```
