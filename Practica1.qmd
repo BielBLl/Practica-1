@@ -93,4 +93,4 @@ taula_v_9
 prop.table(taula_v_9)
 ```
 
-Prova de que s'ha actualitzat.
+Prova de que s'ha actualitzat. hola
