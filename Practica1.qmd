@@ -6,52 +6,49 @@ editor: visual
 
 ## Pràctica 1
 
-Primer especificam totes les llibreries necessàries pel futur, llegim el data frame en format xlsx a vegades de csv, ja que el format d'aquest últim té molts errors de format.
-
-```{r}
+```{r, echo=FALSE, include=FALSE}
 library(ggplot2)
 library(readr)
 library(readxl)
 library(dplyr)
 data<-read_xlsx("estudioSatisfaccion2023.xlsx")
-head(data)
 
 ```
 
 A més aquí definirem algunes funcions que usarem posteriorment.
 
-```{r}
+```{r, echo=FALSE, include=FALSE}
 valors_na<-function(variable){
   return (sum(is.na(variable)))
   
 }
 ```
 
-(Abans d'això hauriem de posar cada variable en la forma que toca com 'character' o 'numeric'. Eliminam identificació i dates i a més el survey_id és igual a tot.)
-
 Eliminarem la identificació de cada enquestat per mantenir l'anonimat i les dues variables posteriors, ja que no aporten informació. La variable "Survey_Id" la podem eliminar també, ja que només existeix un valor.
 
-```{r,include=FALSE}
+```{r,echo=FALSE}
 data.v1<-data[,-1:-4]
+head(data.v1)
 ```
 
 Ara a l'haver eliminat dades innecessàries podem veure com totes les variables estan definides com a caràcter, algunes hauran de ser del tipus "numeric" per tal de poder fer càlculs amb els valors.
 
-```{r,include=FALSE}
+```{r,echo=FALSE}
 dimensions_data<-dim(data.v1)
+dimensions_data
 ```
+
+Com es pot veure hi ha 1728 variables i 11 preguntes.
 
 Abans de començar a tractar la informació del data frame, primer mirem quins elements es tenen en compte en aquest estudi.
 
-```{r}
+```{r, echo=FALSE}
 colnames(data.v1)
 ```
 
-La informació més important del data frame és la distribució de participants a través dels museus, veurem quin dels museus és el més frecuent i quin el que menys. En l'enquesta que esteim estudiant existeixen 1728 enquestats i 11 variables en total.
+La informació més important del data frame és la distribució de participants a través dels museus, veurem quin dels museus és el més frecuent i quin el que menys.
 
-(Tractament plantilla per dades de caracter com el nom del museu, podem canviar el tipus de presentació com un violi)
-
-```{r}
+```{r, echo=FALSE}
 taula_frec_museus<-table(data.v1$`1_¿Qué museo acabas de visitar?`)
 taula_frec_museus
 prop_taula_frec_museus<-prop.table(taula_frec_museus)
@@ -60,16 +57,11 @@ prop_taula_frec_museus
 
 A través d'aquesta taula podem apreciar que un 95% dels visitants provenen del museu "Història de Madrid" o "San Antonio de la Florida" amb 1178 i 467 enquestats respectivament. Amb aquesta total dominació, els grafs perden tot el valor representatiu, podem notar que qui té menys enquestats és " Castillo de Alameda" amb un 0.1% amb 2 enquestats.
 
-(Tractament per dades ordinals com les valoracions amb un histograma)
-
-De les variables numèriques com valoracions, es a dir, de la pregunta 2 fins la 6 ens centrarem en l'estudi de la última, ja que totes les anteriors tenen resultats similars.
-
-Abans de l'estudi exploratori de la pregunta 6 és interesant notar com la pregunta 5, que tracta l'adaptació a 
-Mitjançant aquesta taula podem apreciar que un 95% dels visitants provenen del museu "Història de Madrid" o "San Antonio de la Florida" amb 1178 i 467 enquestats respectivament. Amb aquesta total dominació, els grafs perden tot el valor representatiu, podem notar que qui té menys enquestats és " Castillo de Alameda" amb un 0.1% amb 2 enquestats.
+De les variables numèriques com valoracions, és a dir, de la pregunta 2 fins la 6 ens centrarem en l'estudi de la última, ja que totes les anteriors tenen resultats similars.
 
 Per ilustrar millor aquesta informació introduïrem un gràfic amb els museus i la quantitat de gent que ha anat a visitar cada un.
 
-```{r}
+```{r, echo=FALSE}
 barplot(taula_frec_museus,
         main = "Nombre de visitants per museu",
         beside = TRUE,
@@ -77,80 +69,42 @@ barplot(taula_frec_museus,
         col = palette("Pastel 2"),
         las = 2,          # Rotar etiquetes de l'eix X
         cex.names = 0.6,  # Reuïm escala de les etiquetes
-        cex.main = 1.4)   # Ajuestem tamany del títol
+        cex.main = 1.4,   # Ajuestem tamany del títol
+        args.legend = list(cex=0.5))
+
+
 ```
 
 D'aquesta manera, només fent un ràpid colp d'ull al gràfic ja podem intuïr els resultats numèrics que hem obtingut abans.
 
-(Tractament per dades ordinals com les valoracions amb un histograma)
-
-De les variables numèriques com valoracions, es a dir, de la pregunta 2 fins la 6 ens centrarem en l'estudi de la última, ja que totes les anteriors tenen resultats similars.
-
 Abans de l'estudi exploratori de la pregunta 6 és interesant notar com la pregunta 5, que tracta l'adaptació a la discapacitat, té molts més enquestats que han decidit no contestar-la amb un total de 332, on per exemple la pregunta 2 te només uns 59.
 
-```{r}
+```{r, echo=FALSE}
 variable_2<-data.v1$`2_La recepción y atención al público`
 variable_5<-data.v1$`5_La adaptación a visitantes con discapacidad`
 valors_na(variable_2)
 valors_na(variable_5)
+variable_6<-data.v1$`6_Teniendo en cuenta toda su experiencia, ¿cuál es su valoración global con la visita  en una escala de 0 a 10, siendo “0”, totalmente insatisfactoria y “10”, totalmente satisfactoria`
 ```
 
-```{r}
-taula_v_5<-table(variable_5)
-taula_v_5
-prop_taula_v_5<-prop.table(taula_v_5)
-prop_taula_v_5
-numeric_v_5=as.numeric(variable_5)
-hist(x=numeric_v_5,ylim = c(0,1000),main = "Histograma distribució nota general")
+```{r, echo=FALSE}
+taula_v_6<-table(variable_6)
+taula_v_6
+prop_taula_v_6<-prop.table(taula_v_6)
+prop_taula_v_6
+numeric_v_6=as.numeric(variable_6)
+hist(x=numeric_v_6,ylim = c(0,1000),main = "Histograma distribució nota general", col = "#FFB6C1", xlab = "Valoració")
 ```
 
 Podem notar que la moda seria donar un 10 a la pregunta, al tenir un 62% de probabilitat també serà la media, a més podem calcular facilment la mitjana la qual dona un valor de 9.175
 
-```{r}
-mean(as.numeric(na.omit(variable_5)))
+```{r, echo=FALSE}
+mean(as.numeric(na.omit(variable_6)))
 ```
-
-Una dada típica d'enquestes seria el sexe de l'enquestat, amb un estudi superficial podem fácilment veure que el gènere femení manté la dominancia amb un 57.3% de pressència, el sexe masculí amb un 39.4% en segon lloc i finalment "Otro" amb un 3.2%.
-
-```{r}
-variable_9<-data.v1$`9_¿Cuál es su sexo?`
-taula_v_9<-table(variable_9)
-pie(taula_v_9,main = "Distribució Sexes")
-```
-
-```{r,include=FALSE}
-taula_v_9
-prop.table(taula_v_9)
-```
-
-Vegem ara quina es la proporcio d'edat dels visitants del museu.
-
-```{r}
-variable_8<-data.v1$`8_¿Cuál es su grupo de edad?`
-taula_v_8<-table(variable_8)
-pie(taula_v_8,main = "Distribució Edats")
-```
-
-A continuació, una pregunta que es podem demanar és si existeix alguna relació entre el grup d'edat al que hi pertanyen els visitants i els museus que visiten aquests grups.
-
-```{r}
-# Ens assegurem que les variables siguen factors.
-data.v1$`8_¿Cuál es su grupo de edad?` <- as.factor(data.v1$`8_¿Cuál es su grupo de edad?`)
-data.v1$`1_¿Qué museo acabas de visitar?` <- as.factor(data.v1$`1_¿Qué museo acabas de visitar?`)
-
-# Creem la taula que ens interessa.
-taula_museus_edat <- table(data.v1$`8_¿Cuál es su grupo de edad?`, data.v1$`1_¿Qué museo acabas de visitar?`)
-
-# realitzem la prova de independència amb el mètode de Fisher ja que la taula té prous valors propers o igual a 0, però per ser una taula tant gran hem de fer-ho mitjançant la simulacions de p-valors perquè puga funcionar.
-test_result <- fisher.test(taula_museus_edat, simulate.p.value = TRUE)
-test_result
-```
-
-Com hem obtingut un p-valor molt petit (0.0005) haurem de rebutjar la hipòtesi de què les variables són independents, llavors les edats i els museus poden guardar algun tipus de ralció. Ara bé, aquestes dades estan subjectes a què la frqüència de visita als museus difereix molt d'uns a altres, llavors pot influenciar prou en aquest estudi.
 
 Un altre dupte que ens pot sortir al tractar amb un servei, en aquest cas el que oferixen els museus, és la valoració mitjana de cada un d'ells, per així tenir en compte aquesta informació per triar quin museu visitar. Aleshores, calcularem la puntuació mitjana de cada un.
 
-```{r}
+```{r, echo=FALSE}
 # Creem la taula amb els museus i les seues puntuacions.
 taula_museus_puntuacio <- table(data.v1$`1_¿Qué museo acabas de visitar?`, data.v1$`6_Teniendo en cuenta toda su experiencia, ¿cuál es su valoración global con la visita  en una escala de 0 a 10, siendo “0”, totalmente insatisfactoria y “10”, totalmente satisfactoria`)
 
@@ -201,4 +155,27 @@ barplot(
   ylab = "Valoració",
   cex.names = 0.7
 )
+```
+
+Una dada típica d'enquestes seria el sexe de l'enquestat.
+
+```{r, echo=FALSE}
+variable_9<-data.v1$`9_¿Cuál es su sexo?`
+taula_v_9<-table(variable_9)
+pie(taula_v_9,main = "Distribució Sexes")
+```
+
+```{r, echo=FALSE}
+taula_v_9
+prop.table(taula_v_9)
+```
+
+Amb un estudi superficial podem fácilment veure que el gènere femení manté la dominancia amb un 57.3% de pressència, el sexe masculí amb un 39.4% en segon lloc i finalment "Otro" amb un 3.2%.
+
+Vegem ara quina es la proporcio d'edat dels visitants del museu.
+
+```{r, echo=FALSE}
+variable_8<-data.v1$`8_¿Cuál es su grupo de edad?`
+taula_v_8<-table(variable_8)
+pie(taula_v_8,main = "Distribució Edats")
 ```
