@@ -20,40 +20,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
@@ -98,11 +64,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="pràctica-1" class="level2">
 <h2 class="anchored" data-anchor-id="pràctica-1">Pràctica 1</h2>
-<p>Primer especificam totes les llibreries necessàries pel futur, llegim el data frame en format xlsx a vegades de csv, ja que el format d’aquest últim té molts errors de format.</p>
-<p>A més aquí definirem algunes funcions que usarem posteriorment.</p>
-<p>(Abans d’això hauriem de posar cada variable en la forma que toca com ‘character’ o ‘numeric’. Eliminam identificació i dates i a més el survey_id és igual a tot.)</p>
+<p>Primer de tot carregam el dataframe i seguidament mirarem quines modificacions podem fer per poder tractar les dades.</p>
 <p>Eliminarem la identificació de cada enquestat per mantenir l’anonimat i les dues variables posteriors, ja que no aporten informació. La variable “Survey_Id” la podem eliminar també, ja que només existeix un valor.</p>
 <p>Ara a l’haver eliminat dades innecessàries podem veure com totes les variables estan definides com a caràcter, algunes hauran de ser del tipus “numeric” per tal de poder fer càlculs amb els valors.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1728   11</code></pre>
+</div>
+</div>
+<p>Com es pot veure hi ha 1728 variables i 11 preguntes.</p>
 <p>Abans de començar a tractar la informació del data frame, primer mirem quins elements es tenen en compte en aquest estudi.</p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
@@ -119,8 +89,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 [11] "9_¿Cuál es su sexo?"                                                                                                                                                                    </code></pre>
 </div>
 </div>
-<p>La informació més important del data frame és la distribució de participants a través dels museus, veurem quin dels museus és el més frecuent i quin el que menys. En l’enquesta que esteim estudiant existeixen 1728 enquestats i 11 variables en total.</p>
-<p>(Tractament plantilla per dades de caracter com el nom del museu, podem canviar el tipus de presentació com un violi)</p>
+<p>De les variables numèriques com valoracions, és a dir, de la pregunta 2 fins la 6 ens centrarem en l’estudi de la última, ja que totes les anteriors tenen resultats similars.</p>
+<p>La informació més important del data frame és la distribució de participants a través dels museus, veurem quin dels museus és el més frecuent i quin el que menys.</p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -150,9 +120,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>A través d’aquesta taula podem apreciar que un 95% dels visitants provenen del museu “Història de Madrid” o “San Antonio de la Florida” amb 1178 i 467 enquestats respectivament. Amb aquesta total dominació, els grafs perden tot el valor representatiu, podem notar que qui té menys enquestats és ” Castillo de Alameda” amb un 0.1% amb 2 enquestats.</p>
-<p>(Tractament per dades ordinals com les valoracions amb un histograma)</p>
-<p>De les variables numèriques com valoracions, es a dir, de la pregunta 2 fins la 6 ens centrarem en l’estudi de la última, ja que totes les anteriors tenen resultats similars.</p>
-<p>Abans de l’estudi exploratori de la pregunta 6 és interesant notar com la pregunta 5, que tracta l’adaptació a Mitjançant aquesta taula podem apreciar que un 95% dels visitants provenen del museu “Història de Madrid” o “San Antonio de la Florida” amb 1178 i 467 enquestats respectivament. Amb aquesta total dominació, els grafs perden tot el valor representatiu, podem notar que qui té menys enquestats és ” Castillo de Alameda” amb un 0.1% amb 2 enquestats.</p>
 <p>Per ilustrar millor aquesta informació introduïrem un gràfic amb els museus i la quantitat de gent que ha anat a visitar cada un.</p>
 <div class="cell">
 <div class="cell-output-display">
@@ -164,30 +131,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>D’aquesta manera, només fent un ràpid colp d’ull al gràfic ja podem intuïr els resultats numèrics que hem obtingut abans.</p>
-<p>(Tractament per dades ordinals com les valoracions amb un histograma)</p>
-<p>De les variables numèriques com valoracions, es a dir, de la pregunta 2 fins la 6 ens centrarem en l’estudi de la última, ja que totes les anteriors tenen resultats similars.</p>
 <p>Abans de l’estudi exploratori de la pregunta 6 és interesant notar com la pregunta 5, que tracta l’adaptació a la discapacitat, té molts més enquestats que han decidit no contestar-la amb un total de 332, on per exemple la pregunta 2 te només uns 59.</p>
 <div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 59</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 332</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>variable_5
-  0   1  10   2   3   4   5   6   7   8   9 
-  3   3 877   5   4   8  27  17  81 161 210 </code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>variable_5
-          0           1          10           2           3           4 
-0.002148997 0.002148997 0.628223496 0.003581662 0.002865330 0.005730659 
-          5           6           7           8           9 
-0.019340974 0.012177650 0.058022923 0.115329513 0.150429799 </code></pre>
-</div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -197,45 +142,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>Podem notar que la moda seria donar un 10 a la pregunta, al tenir un 62% de probabilitat també serà la media, a més podem calcular facilment la mitjana la qual dona un valor de 9.175</p>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 9.175501</code></pre>
-</div>
-</div>
-<p>Una dada típica d’enquestes seria el sexe de l’enquestat, amb un estudi superficial podem fácilment veure que el gènere femení manté la dominancia amb un 57.3% de pressència, el sexe masculí amb un 39.4% en segon lloc i finalment “Otro” amb un 3.2%.</p>
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Practica1_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>Vegem ara quina es la proporcio d’edat dels visitants del museu.</p>
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Practica1_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>A continuació, una pregunta que es podem demanar és si existeix alguna relació entre el grup d’edat al que hi pertanyen els visitants i els museus que visiten aquests grups.</p>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>
-    Fisher's Exact Test for Count Data with simulated p-value (based on
-    2000 replicates)
-
-data:  taula_museus_edat
-p-value = 0.0004998
-alternative hypothesis: two.sided</code></pre>
-</div>
-</div>
-<p>Com hem obtingut un p-valor molt petit (0.0005) haurem de rebutjar la hipòtesi de què les variables són independents, llavors les edats i els museus poden guardar algun tipus de ralció. Ara bé, aquestes dades estan subjectes a què la frqüència de visita als museus difereix molt d’uns a altres, llavors pot influenciar prou en aquest estudi.</p>
-<p>Un altre dupte que ens pot sortir al tractar amb un servei, en aquest cas el que oferixen els museus, és la valoració mitjana de cada un d’ells, per així tenir en compte aquesta informació per triar quin museu visitar. Aleshores, calcularem la puntuació mitjana de cada un.</p>
+<p>Un altre dubte que ens pot sortir al tractar amb un servei, en aquest cas el que oferixen els museus, és la valoració mitjana de cada un d’ells, per així tenir en compte aquesta informació per triar quin museu visitar. Aleshores, calcularem la puntuació mitjana de cada un.</p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>                                      
@@ -262,10 +169,6 @@ alternative hypothesis: two.sided</code></pre>
   Templo de Debod                        1</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 10.000000  9.500000  9.194876  9.700000  7.500000 10.000000  9.323661
-[8]  9.466667  4.875000</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
 <pre><code>                                 Museu   Mitjana
 1                   Arte Contemporáneo 10.000000
 2               Castillo de la Alameda  9.500000
@@ -280,20 +183,31 @@ alternative hypothesis: two.sided</code></pre>
 </div>
 <p>Per fer aquesta informació més visual farem un gràfic amb les puntiacions mitjanes que ha obtingut cada museu.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear el barplot</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  taula_mitjana<span class="sc">$</span>Mitjana, </span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">names.arg =</span> taula_mitjana<span class="sc">$</span>Museu, </span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">las =</span> <span class="dv">2</span>, </span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">palette</span>(<span class="st">"Pastel 2"</span>), </span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">"Valoració dels museus"</span>, </span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">"Valoració"</span>,</span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex.names =</span> <span class="fl">0.7</span></span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Practica1_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Practica1_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Una dada típica d’enquestes seria el sexe de l’enquestat.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Practica1_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Amb un estudi superficial podem fácilment veure que el gènere femení manté la dominancia amb un 57.3% de pressència, el sexe masculí amb un 39.4% en segon lloc i finalment “Otro” amb un 3.2%.</p>
+<p>Vegem ara quina es la proporcio d’edat dels visitants del museu.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Practica1_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
